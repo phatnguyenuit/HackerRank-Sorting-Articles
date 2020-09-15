@@ -5,46 +5,46 @@ import { render, within, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 const testIds = {
-  mostUpvotedLink: "most-upvoted-link",
-  mostRecentLink: "most-recent-link",
-  article: "article",
+  mostUpvotedLink: 'most-upvoted-link',
+  mostRecentLink: 'most-recent-link',
+  article: 'article',
 };
 
 const articles = [
   {
-    title: "Alphabet earnings",
+    title: 'Alphabet earnings',
     upvotes: 22,
-    date: "2011-11-23",
+    date: '2011-11-23',
   },
   {
-    title: "Artificial Mountains",
+    title: 'Artificial Mountains',
     upvotes: 200,
-    date: "2019-11-23",
+    date: '2019-11-23',
   },
   {
-    title: "Scaling to 100k Users",
+    title: 'Scaling to 100k Users',
     upvotes: 72,
-    date: "2019-10-21",
+    date: '2019-10-21',
   },
   {
-    title: "A message to our customers",
+    title: 'A message to our customers',
     upvotes: 12,
-    date: "2019-10-22",
+    date: '2019-10-22',
   },
   {
-    title: "the Emu War",
+    title: 'the Emu War',
     upvotes: 24,
-    date: "2018-04-01",
+    date: '2018-04-01',
   },
   {
     title: "What's SAP",
     upvotes: 1,
-    date: "2017-01-21",
+    date: '2017-01-21',
   },
   {
-    title: "Simple text editor has 15k monthly users",
+    title: 'Simple text editor has 15k monthly users',
     upvotes: 83,
-    date: "2020-02-22",
+    date: '2020-02-22',
   },
 ];
 
@@ -72,8 +72,7 @@ const mostRecentArticles = articles.concat().sort((a, b) => {
 
 const renderApp = () => render(<App articles={articles} />);
 
-beforeEach(() => {
-});
+beforeEach(() => {});
 
 afterEach(() => {
   cleanup();
@@ -82,11 +81,15 @@ afterEach(() => {
 const expectArticles = (articles, expectedArticles) => {
   expect(articles).toHaveLength(expectedArticles.length);
   articles.forEach((article, i) => {
-    const title = within(article).getByTestId("article-title").textContent;
-    const upvotes = within(article).getByTestId("article-upvotes").textContent;
-    const date = within(article).getByTestId("article-date").textContent;
+    const title = within(article).getByTestId('article-title').textContent;
+    const upvotes = within(article).getByTestId('article-upvotes').textContent;
+    const date = within(article).getByTestId('article-date').textContent;
     const expectedArticle = expectedArticles[i];
-    expect([title, upvotes, date]).toEqual([expectedArticle.title, expectedArticle.upvotes.toString(), expectedArticle.date]);
+    expect([title, upvotes, date]).toEqual([
+      expectedArticle.title,
+      expectedArticle.upvotes.toString(),
+      expectedArticle.date,
+    ]);
   });
 };
 
@@ -117,18 +120,25 @@ test('Clicking on newest renders expected articles', () => {
   expectArticles(articles, mostRecentArticles);
 });
 
-
 test('Sequence of navigation clicks renders expected artices', () => {
   const { getByTestId, queryAllByTestId } = renderApp();
 
   const mostUpvotedLink = getByTestId(testIds.mostUpvotedLink);
   const mostRecentLink = getByTestId(testIds.mostRecentLink);
 
-  const elements = [mostRecentLink, mostUpvotedLink, mostUpvotedLink, mostRecentLink, mostRecentLink, mostUpvotedLink];
+  const elements = [
+    mostRecentLink,
+    mostUpvotedLink,
+    mostUpvotedLink,
+    mostRecentLink,
+    mostRecentLink,
+    mostUpvotedLink,
+  ];
   for (const elem of elements) {
     fireEvent.click(elem);
     const articles = queryAllByTestId(testIds.article);
-    const expectedArticles = elem === mostUpvotedLink ? mostUpvotedArticles : mostRecentArticles;
+    const expectedArticles =
+      elem === mostUpvotedLink ? mostUpvotedArticles : mostRecentArticles;
     expectArticles(articles, expectedArticles);
   }
 });
